@@ -2,7 +2,7 @@
 <project name="SEBLab3" default="music">
     <property file="build.properties"/>
 
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <taskdef resource="${antlibresource.location}">
         <classpath>
             <pathelement location="${antlib.location}"/>
         </classpath>
@@ -33,7 +33,7 @@
     </target>
 
     <target name="build" depends="compile">
-        <jar destfile="${dest.jar}" basedir="${compiled.dir.classes}" compress="false" index="true">
+        <jar destfile="${dest.jar}" basedir="${compiled.dir.classes}">
             <manifest>
                 <attribute name="Launched class" value="Main"/>
             </manifest>
@@ -47,7 +47,7 @@
     </target>
 
     <target name="test" depends="build">
-        <junit fork="true" printsummary="on">
+        <junit printsummary="on">
             <classpath>
                 <path refid="classpath.source"/>
                 <pathelement location="${compiled.dir.classes}"/>
