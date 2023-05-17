@@ -1,6 +1,3 @@
-package test;
-
-import main.Point;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

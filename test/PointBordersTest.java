@@ -1,12 +1,9 @@
-package test;
-
-import main.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,7 +31,7 @@ public class PointBordersTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data(){
-        return List.of(
+        return Arrays.asList(
                 new Object[]{-5, 0},
                 new Object[]{5, 0},
                 new Object[]{0, 5},

@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<project name="SEBLab3" default="music">
+    <property file="build.properties"/>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${antlib.location}"/>
+        </classpath>
+    </taskdef>
+
+    <path id="classpath.source">
+        <fileset dir="${libs.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="${compiled.dir.classes}"/>
+        <mkdir dir="${compiled.dir.tests}"/>
+        <javac destdir="${compiled.dir.classes}" includeantruntime="false">
+            <src path="${main.dir}"/>
+            <classpath>
+                <pathelement location="${compiled.dir.classes}"/>
+                <path refid="classpath.source"/>
+            </classpath>
+        </javac>
+        <javac destdir="${compiled.dir.tests}" includeantruntime="false">
+            <src path="${test.dir}"/>
+            <classpath>
+                <pathelement location="${compiled.dir.classes}"/>
+                <path refid="classpath.source"/>
+            </classpath>
+        </javac>
+        <echo message="COMPILED"/>
+    </target>
+
+    <target name="build" depends="compile">
+        <jar destfile="${dest.jar}" basedir="${compiled.dir.classes}" compress="false" index="true">
+            <manifest>
+                <attribute name="Launched class" value="Main"/>
+            </manifest>
+        </jar>
+        <echo message="BUILDED"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${compiled.dir}"/>
+        <echo message="CLEANED"/>
+    </target>
+
+    <target name="test" depends="build">
+        <junit fork="true" printsummary="on">
+            <classpath>
+                <path refid="classpath.source"/>
+                <pathelement location="${compiled.dir.classes}"/>
+                <pathelement location="${compiled.dir.tests}"/>
+            </classpath>
+            <test name="PointTest"/>
+            <test name="PointBordersTest"/>
+        </junit>
+        <echo message="TESTED"/>
+    </target>
+
+    <target name="music" depends="build">
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="${musicPlayer} ${music}"/>
+            <arg value="-p"/>
+        </exec>
+        <echo message="MUSIC"/>
+    </target>
+
+    <target name="history">
+        <trycatch>
+            <try>
+                <runtarget target="compile"/>
+                <echo message="HISTORY COMPILED"/>
+            </try>
+            <catch>
+                <exec executable="cmd" outputproperty="git_log_head">
+                    <arg value="/c"/>
+                    <arg value="git log --pretty=format:%h - %an, %ar : %s | head -1"/>
+                </exec>
+                <exec executable="cmd" outputproperty="git_log_tail">
+                    <arg value="/c"/>
+                    <arg value="git log --pretty=format:%h - %an, %ar : %s | tail -1"/>
+                </exec>
+                <if>
+                    <equals arg1="${git_log_head}" arg2="${git_log_tail}"/>
+                    <then>
+                        <echo message="REACHED FIRST COMMIT, STOPPED TRYING"/>
+                    </then>
+                    <else>
+                        <exec executable="cmd" output="diff">
+                            <arg value="/c"/>
+                            <arg value="git diff HEAD~1"/>
+                        </exec>
+                        <exec executable="cmd">
+                            <arg value="/c"/>
+                            <arg value="git reset HEAD~1 --hard"/>
+                        </exec>
+                        <runtarget target="history"/>
+                    </else>
+                </if>
+            </catch>
+        </trycatch>
+    </target>
+
+</project>
