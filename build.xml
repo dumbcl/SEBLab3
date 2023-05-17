@@ -77,11 +77,11 @@
             <catch>
                 <exec executable="cmd" outputproperty="git_log_head">
                     <arg value="/c"/>
-                    <arg value="git log --pretty=format:%h - %an, %ar : %s | head -1"/>
+                    <arg value="git log --pretty=format:%h - %an | head -1"/>
                 </exec>
                 <exec executable="cmd" outputproperty="git_log_tail">
                     <arg value="/c"/>
-                    <arg value="git log --pretty=format:%h - %an, %ar : %s | tail -1"/>
+                    <arg value="git log --pretty=format:%h - %an | tail -1"/>
                 </exec>
                 <if>
                     <equals arg1="${git_log_head}" arg2="${git_log_tail}"/>
