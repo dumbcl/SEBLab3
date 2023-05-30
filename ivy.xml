@@ -1,7 +1,6 @@
-<ivy-module version="2.0">
+<ivy-module version="2.0" >
     <info organisation="org.apache" module="SEBLab3"/>
     <dependencies>
-        <dependency org="commons-lang" name="commons-lang" rev="2.0"/>
-        <dependency org="commons-cli" name="commons-cli" rev="1.0"/>
+        <dependency org="javax.servlet" name="servlet-api" rev="2.5" />
     </dependencies>
 </ivy-module>
