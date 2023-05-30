@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="SEBLab3" default="music">
+<project name="SEBLab3" default="music" xmlns:ivy="antlib:org.apache.ivy.ant">
     <property file="build.properties"/>
 
     <taskdef resource="${antlibresource.location}">
@@ -12,17 +12,21 @@
         <fileset dir="${libs.dir}" includes="**/*.jar"/>
     </path>
 
+    <target name="resolve" description="Test ivy installation">
+        <ivy:retrieve/>
+    </target>
+
     <target name="compile">
         <mkdir dir="${compiled.dir.classes}"/>
         <mkdir dir="${compiled.dir.tests}"/>
-        <javac destdir="${compiled.dir.classes}" includeantruntime="false">
+        <javac destdir="${compiled.dir.classes}" source="${source.version}" target="${target.version}" includeantruntime="false">
             <src path="${main.dir}"/>
             <classpath>
                 <pathelement location="${compiled.dir.classes}"/>
                 <path refid="classpath.source"/>
             </classpath>
         </javac>
-        <javac destdir="${compiled.dir.tests}" includeantruntime="false">
+        <javac destdir="${compiled.dir.tests}" source="${source.version}" target="${target.version}" includeantruntime="false">
             <src path="${test.dir}"/>
             <classpath>
                 <pathelement location="${compiled.dir.classes}"/>
